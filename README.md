@@ -1,6 +1,9 @@
 # xvx
 一个简易操作系统，待续更新
 
+linux上使用qemu运行
+编译成功后, 执行qemu -hda xvx.img -boot a
+
 参考资料：http://wiki.0xffffff.org x86架构操作系统内核的实现
 https://book.douban.com/subject/26745156/ 《操作系统真象还原》
 XV6 OS
