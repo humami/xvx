@@ -5,8 +5,8 @@
 #include "bitmap.h"
 
 enum pool_flags {
-	PF_KERNEL = 1,
-	PF_USER = 2
+    PF_KERNEL = 1,
+    PF_USER = 2
 };
 
 #define PG_P_1   1
@@ -17,8 +17,8 @@ enum pool_flags {
 #define PG_US_U  4
 
 typedef struct virtual_addr {
-	bitmap vaddr_bitmap;
-	uint32_t vaddr_start;
+    bitmap vaddr_bitmap;
+    uint32_t vaddr_start;
 }virtual_addr;
 
 extern struct pool kernel_pool, user_pool;
