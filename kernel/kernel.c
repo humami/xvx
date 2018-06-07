@@ -36,9 +36,9 @@ void k_thread_b(void *arg)
 
 int main(void)
 {
-	console_clear();
-	idt_init();
-	mem_init();
+    console_clear();
+    idt_init();
+    mem_init();
     thread_init();
     
     console_write("\n");

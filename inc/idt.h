@@ -4,21 +4,21 @@
 #include "types.h"
 
 typedef struct idt_entry_t{
-	uint16_t offset_low;
-	uint16_t selector;
-	uint8_t  dcount;
-	uint8_t  attribute;
-	uint16_t offset_high;
+    uint16_t offset_low;
+    uint16_t selector;
+    uint8_t  dcount;
+    uint8_t  attribute;
+    uint16_t offset_high;
 }__attribute__((packed)) idt_entry_t;
 
 typedef struct idt_ptr_t{
-	uint16_t limit;
-	uint32_t base;
+    uint16_t limit;
+    uint32_t base;
 }__attribute__((packed)) idt_ptr_t;
 
 enum intr_status {
-	INTR_OFF,
-	INTR_ON
+    INTR_OFF,
+    INTR_ON
 };
 
 typedef void(*interrupt_handler_t)(void);

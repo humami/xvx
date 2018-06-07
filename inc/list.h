@@ -4,14 +4,14 @@
 #include "types.h"
 
 typedef struct list_elem {
-	struct list_elem *prev;
-	struct list_elem *next;
+    struct list_elem *prev;
+    struct list_elem *next;
 }list_elem;
 
 typedef struct  list
 {
-	struct list_elem head;
-	struct list_elem tail;
+    struct list_elem head;
+    struct list_elem tail;
 }list;
 
 typedef bool function(list_elem *elem, int arg);

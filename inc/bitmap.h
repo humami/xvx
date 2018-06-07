@@ -4,8 +4,8 @@
 #include "types.h"
 
 typedef struct bitmap {
-	uint32_t btmp_bytes_len;
-	uint8_t *bits;
+    uint32_t btmp_bytes_len;
+    uint8_t *bits;
 }bitmap;
 
 void bitmap_init(bitmap *btmp);
