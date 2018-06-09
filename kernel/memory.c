@@ -1,6 +1,7 @@
 #include "memory.h"
 #include "console.h"
 #include "string.h"
+#include "debug.h"
 
 #define PG_SIZE 4096
 
@@ -74,6 +75,7 @@ static void page_table_add(void *_vaddr, void *_paddr) {
     uint32_t *pte = pte_ptr(vaddr);
 
     if(*pde & 0x00000001) {
+        ASSERT(!(*pte & 0x00000001));
         *pte = (paddr | PG_US_U | PG_RW_W | PG_P_1);
     }
     else {
@@ -81,14 +83,15 @@ static void page_table_add(void *_vaddr, void *_paddr) {
 
         *pde = (pde_phyaddr | PG_US_U | PG_RW_W | PG_P_1);
         memset((void *)((int)pte & 0xfffff000), 0, PG_SIZE);
-
+        
+        ASSERT(!(*pte & 0x00000001));
         *pte = (paddr | PG_US_U | PG_RW_W | PG_P_1);
     }
 }
 
 static void *malloc_page(enum pool_flags pf, uint32_t pg_cnt) {
     void *vaddr_start = vaddr_get(pf, pg_cnt);
-    
+
     if(!vaddr_start)
         return NULL;
 

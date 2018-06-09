@@ -3,11 +3,14 @@
 #include "common.h"
 #include "idt.h"
 #include "thread.h"
+#include "debug.h"
 
 static uint32_t ticks;
 
 static void intr_timer_handler() {
     task_struct *cur_thread = running_thread();
+
+    ASSERT(cur_thread->stack_magic == 0x19950000);
 
     cur_thread->elapsed_ticks++;
     ticks++;

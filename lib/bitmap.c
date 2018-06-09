@@ -1,5 +1,6 @@
 #include "bitmap.h"
 #include "string.h"
+#include "debug.h"
 
 void bitmap_init(bitmap *btmp)
 {
@@ -15,7 +16,8 @@ int bitmap_get(bitmap *btmp, uint32_t bit_idx)
 }
 
 void bitmap_set(bitmap *btmp, uint32_t bit_idx, int8_t value)
-{
+{   
+    ASSERT((value == 0) || (value == 1));
     uint32_t byte_idx = bit_idx / 8;
     uint32_t bit_odd = bit_idx % 8;
 
@@ -32,7 +34,8 @@ int bitmap_scan(bitmap *btmp, uint32_t cnt)
 
     while(0xFF == btmp->bits[idx_byte] && (idx_byte < btmp->btmp_bytes_len))
         idx_byte++;
-
+    
+    ASSERT(idx_byte < btmp->btmp_bytes_len);
     if(idx_byte == btmp->btmp_bytes_len)
         return -1;
 

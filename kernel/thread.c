@@ -2,6 +2,7 @@
 #include "memory.h"
 #include "string.h"
 #include "idt.h"
+#include "debug.h"
 
 #define PG_SIZE 4096
 
@@ -56,8 +57,11 @@ task_struct *thread_start(char *name, int prio, thread_func function, void *func
 
     init_thread(thread, name, prio);
     thread_create(thread, function, func_args);
-
+   
+    ASSERT(!elem_find(&thread_ready_list, &thread->general_tag));
     list_append(&thread_ready_list, &thread->general_tag);
+
+    ASSERT(!elem_find(&thread_all_list, &thread->all_list_tag));
     list_append(&thread_all_list, &thread->all_list_tag);
 
     return thread;
@@ -66,6 +70,8 @@ task_struct *thread_start(char *name, int prio, thread_func function, void *func
 static void make_main_thread() {
     main_thread = running_thread();
     init_thread(main_thread, "main", 10);
+
+    ASSERT(!elem_find(&thread_all_list, &main_thread->all_list_tag));
     list_append(&thread_all_list, &main_thread->all_list_tag);
 }
 
@@ -73,13 +79,15 @@ void schedule() {
     task_struct *cur_thread = running_thread();
 
     if(cur_thread->status == TASK_RUNNING) {
+        ASSERT(!elem_find(&thread_ready_list, &cur_thread->general_tag));
         list_append(&thread_ready_list, &cur_thread->general_tag);
         cur_thread->ticks = cur_thread->priority;
         cur_thread->status = TASK_READY; 
     } else {
 
     }
-
+    
+    ASSERT(!list_empty(&thread_ready_list));
     thread_tag = NULL;
     thread_tag = list_pop(&thread_ready_list);
     task_struct *next_thread = (task_struct *)(0xfffff000 & (uint32_t)thread_tag);
