@@ -1,10 +1,13 @@
 #include "console.h"
 #include "common.h"
+#include "sync.h"
 
 static uint16_t *video_memory = (uint16_t *)0xB8000;
 
 static uint8_t cursor_x = 0;
 static uint8_t cursor_y = 0;
+
+static lock console_lock;
 
 static void move_cursor()
 {
@@ -34,6 +37,42 @@ static void scroll()
     }	
 }
 
+void console_init() {
+    lock_init(&console_lock);
+}
+
+void console_acquire() {
+    lock_acquire(&console_lock);
+}
+
+void console_release() {
+    lock_release(&console_lock);
+}
+
+void sync_write(char *cstr) {
+    console_acquire();
+    console_write(cstr);
+    console_release();
+}
+
+void sync_write_color(char *cstr, real_color_t back, real_color_t fore) {
+    console_acquire();
+    console_write_color(cstr, back, fore);
+    console_release();
+}
+
+void sync_write_hex(uint32_t n, real_color_t back, real_color_t fore) {
+    console_acquire();
+    console_write_hex(n, back, fore);
+    console_release();
+}
+
+void sync_write_dec(uint32_t n, real_color_t back, real_color_t fore) {
+    console_acquire();
+    console_write_dec(n, back, fore);
+    console_release();
+}
+
 void console_clear()
 {
     uint8_t attribute_byte = (0 << 4) | (15 & 0x0F);
@@ -49,7 +88,7 @@ void console_clear()
 }
 
 void console_putc_color(char c, real_color_t back, real_color_t fore)
-{
+{   
 	uint8_t back_color = (uint8_t)back;
 	uint8_t fore_color = (uint8_t)fore;
 
@@ -82,7 +121,7 @@ void console_putc_color(char c, real_color_t back, real_color_t fore)
 }
 
 void console_write(char *cstr)
-{
+{   
 	while(*cstr)
 	    console_putc_color(*cstr++, rc_black, rc_white);
 }
@@ -94,7 +133,7 @@ void console_write_color(char *cstr, real_color_t back, real_color_t fore)
 }
 
 void console_write_hex(uint32_t n, real_color_t back, real_color_t fore)
-{
+{    
     int tmp;
     char c;
     int i;

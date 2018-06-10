@@ -69,7 +69,7 @@ task_struct *thread_start(char *name, int prio, thread_func function, void *func
 
 static void make_main_thread() {
     main_thread = running_thread();
-    init_thread(main_thread, "main", 10);
+    init_thread(main_thread, "main", 20);
 
     ASSERT(!elem_find(&thread_all_list, &main_thread->all_list_tag));
     list_append(&thread_all_list, &main_thread->all_list_tag);
@@ -99,4 +99,24 @@ void thread_init() {
     list_init(&thread_all_list);
     list_init(&thread_ready_list);
     make_main_thread();
+}
+
+void thread_block(enum task_status stat) {
+    ASSERT((stat == TASK_BLOCKED) || (stat == TASK_WAITING) || (stat == TASK_HANGING));
+    enum intr_status old_status = intr_disable();
+    task_struct *cur_thread = running_thread();
+    cur_thread->status = stat;
+    schedule();
+    intr_set_status(old_status);
+}
+
+void thread_unblock(task_struct *pthread) {
+    enum intr_status old_status = intr_disable();
+    ASSERT((pthread->status == TASK_BLOCKED) || (pthread->status == TASK_WAITING) || (pthread->status == TASK_HANGING));
+    if(pthread->status != TASK_READY) {
+        ASSERT(!elem_find(&thread_ready_list, &pthread->general_tag));
+        list_push(&thread_ready_list, &pthread->general_tag);
+        pthread->status = TASK_READY;
+    }
+    intr_set_status(old_status);
 }

@@ -11,13 +11,8 @@ void k_thread_a(void *arg)
     char *para = arg;
 
     while(1)
-    {
-        if(flag == 0)
-        {
-            console_write_color(para, rc_black, rc_red);
-            flag = 1;
-        }
-    }
+        console_write_color(para, rc_black, rc_red);
+
 }
 
 void k_thread_b(void *arg)
@@ -25,13 +20,7 @@ void k_thread_b(void *arg)
     char *para = arg;
 
     while(1)
-    {
-        if(flag == 1)
-        {
-            console_write_color(para, rc_black, rc_green);
-            flag = 0;
-        }
-    }
+        console_write_color(para, rc_black, rc_green);
 }
 
 int main(void)
@@ -40,6 +29,7 @@ int main(void)
     idt_init();
     mem_init();
     thread_init();
+    console_init();
     
     console_write("\n");
     console_write_color("Hello, OS kernel!\n", rc_black, rc_red);
@@ -58,8 +48,8 @@ int main(void)
     */
     intr_enable();
 
-    thread_start("k_thread_a", 1, k_thread_a, "A");
-    thread_start("k_thread_b", 1, k_thread_b, "B");
+    thread_start("k_thread_a", 31, k_thread_a, "argA ");
+    thread_start("k_thread_b", 8, k_thread_b, "argB ");
     
     while(1);
     return 0;

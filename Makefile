@@ -9,7 +9,8 @@ L_FLAGS = -m elf_i386 -T scripts/kernel.ld
 AS_FLAGS = -f elf
 
 OBJS = $(OBJ_DIR)/kernel.o $(OBJ_DIR)/console.o $(OBJ_DIR)/common.o $(OBJ_DIR)/string.o $(OBJ_DIR)/idt.o $(OBJ_DIR)/idts.o \
-$(OBJ_DIR)/timer.o $(OBJ_DIR)/debug.o $(OBJ_DIR)/bitmap.o $(OBJ_DIR)/memory.o $(OBJ_DIR)/thread.o $(OBJ_DIR)/list.o $(OBJ_DIR)/switch.o 
+$(OBJ_DIR)/timer.o $(OBJ_DIR)/debug.o $(OBJ_DIR)/bitmap.o $(OBJ_DIR)/memory.o $(OBJ_DIR)/thread.o $(OBJ_DIR)/list.o $(OBJ_DIR)/switch.o \
+$(OBJ_DIR)/sync.o
 
 all: $(OBJS) link update_img
 
@@ -35,6 +36,9 @@ $(OBJ_DIR)/bitmap.o:lib/bitmap.c inc/bitmap.h
 	$(CC) $(C_FLAGS) $< -o $@
 
 $(OBJ_DIR)/list.o:lib/list.c inc/list.h
+	$(CC) $(C_FLAGS) $< -o $@
+
+$(OBJ_DIR)/sync.o:lib/sync.c inc/sync.h
 	$(CC) $(C_FLAGS) $< -o $@
 
 $(OBJ_DIR)/idt.o:kernel/idt.c inc/idt.h

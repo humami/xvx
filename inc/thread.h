@@ -74,5 +74,7 @@ void thread_create(task_struct *pthread, thread_func function, void *func_args);
 void init_thread(task_struct *pthread, char *name, int prio);
 task_struct *thread_start(char *name, int prio, thread_func function, void *func_args);
 void schedule();
+void thread_block(enum task_status stat);
+void thread_unblock(task_struct *pthread);
 
 #endif

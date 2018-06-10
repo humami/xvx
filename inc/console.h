@@ -22,7 +22,19 @@ typedef enum real_color {
     rc_light_white = 15 
 }real_color_t;
 
-void console_clear();
+void console_init();
+
+void console_acquire();
+
+void console_release();
+
+void sync_write(char *cstr);
+
+void sync_write_color(char *cstr, real_color_t back, real_color_t fore);
+
+void sync_write_hex(uint32_t n, real_color_t back, real_color_t fore);
+
+void sync_write_dec(uint32_t n, real_color_t back, real_color_t fore);
 
 void console_putc_color(char c, real_color_t back, real_color_t fore);
 
